@@ -5,9 +5,17 @@ package com.reactions.deathlines.domain.entity
  */
 sealed class Entity {
 
-    data class Album(
-            val id: Long,
-            val title: String,
-            val userId: Long
+    data class Song(
+            val artistId: Long,
+            val collectionId: Long,
+            val trackId: Long,
+            val kind: String,
+            val artistName: String,
+            val collectionName: String,
+            val trackName: String,
+            val trackPrice: String,
+            val primaryGenreName: String,
+            val previewUrl: String,
+            val artworkUrl100: String
     ) : Entity()
 }

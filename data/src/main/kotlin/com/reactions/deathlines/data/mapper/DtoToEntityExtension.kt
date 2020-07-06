@@ -6,8 +6,16 @@ import com.reactions.deathlines.domain.entity.Entity
 /**
  * Extension class to map album dto to album entity
  */
-fun AlbumApi.Dto.Album.map() = Entity.Album(
-        id = id,
-        userId = userId,
-        title = title
+fun AlbumApi.Dto.Song.map() = Entity.Song(
+        artistId = artistId,
+        collectionId = collectionId,
+        trackId = trackId,
+        kind = kind,
+        artistName = artistName,
+        collectionName = collectionName,
+        trackName = trackName,
+        trackPrice = trackPrice,
+        primaryGenreName = primaryGenreName,
+        previewUrl = previewUrl,
+        artworkUrl100 = artworkUrl100
 )

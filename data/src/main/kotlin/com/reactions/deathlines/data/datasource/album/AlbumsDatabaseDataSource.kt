@@ -13,12 +13,12 @@ interface AlbumsDatabaseDataSource : BaseDataSource {
     /**
      * Get all of albums from database implementation
      */
-    fun getAlbums(): DataSource.Factory<Int, Entity.Album>
+    fun getSongs(): DataSource.Factory<Int, Entity.Song>
 
     /**
      * Persist all of albums in local database
      */
-    fun persist(albums: List<Entity.Album>, insertFinished: () -> Unit)
+    fun persist(albums: List<Entity.Song>, insertFinished: () -> Unit)
 
-    fun deleteAlbum(album: Entity.Album): Single<Int>
+    fun deleteAlbum(album: Entity.Song): Single<Int>
 }

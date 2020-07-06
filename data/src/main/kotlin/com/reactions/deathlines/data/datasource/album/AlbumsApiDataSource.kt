@@ -7,13 +7,26 @@ import com.reactions.deathlines.domain.common.ResultState
 import com.reactions.deathlines.domain.entity.Entity
 
 @SuppressLint("CheckResult")
-fun getAlbums(
+fun getSongs(
         apiSource: AlbumsApiDataSource,
-        page: Int,
-        itemsPerPage: Int,
-        onResult: (result: ResultState<List<Entity.Album>>) -> Unit
+        songName: String,
+        onResult: (result: ResultState<List<Entity.Song>>) -> Unit
 ) {
-    apiSource.getAlbums((page - 1) * itemsPerPage, itemsPerPage)
+    apiSource.getSongs(songName)
+            .subscribe({ data ->
+                onResult(ResultState.Success(data))
+            }, { throwable ->
+                onResult(ResultState.Error(throwable, null))
+            })
+}
+
+@SuppressLint("CheckResult")
+fun getSongsFromAlbum(
+        apiSource: AlbumsApiDataSource,
+        collectionId: Int,
+        onResult: (result: ResultState<List<Entity.Song>>) -> Unit
+) {
+    apiSource.getSongsFromAlbum(collectionId)
             .subscribe({ data ->
                 onResult(ResultState.Success(data))
             }, { throwable ->
@@ -26,8 +39,7 @@ fun getAlbums(
  */
 interface AlbumsApiDataSource : BaseDataSource {
 
-    /**
-     * Get all of albums from network
-     */
-    fun getAlbums(page: Int, pageSize: Int): Single<List<Entity.Album>>
+    fun getSongs(song: String): Single<List<Entity.Song>>
+
+    fun getSongsFromAlbum(collectionId: Int): Single<List<Entity.Song>>
 }

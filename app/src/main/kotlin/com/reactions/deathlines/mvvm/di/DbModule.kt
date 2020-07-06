@@ -18,5 +18,5 @@ class DbModule {
 
     @Singleton
     @Provides
-    fun provideAlbumDao(myDatabase: MyDatabase) = myDatabase.albumDao()
+    fun provideAlbumDao(myDatabase: MyDatabase) = myDatabase.songDao()
 }

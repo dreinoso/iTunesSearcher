@@ -30,7 +30,7 @@ android {
             applicationIdSuffix ".debug"
             versionNameSuffix "-DEBUG"
             signingConfig android.signingConfigs.debug
-            buildConfigField("String", "BASE_URL", "\"https://jsonplaceholder.typicode.com\"")
+            buildConfigField("String", "BASE_URL", "\"https://itunes.apple.com\"")
         }
     }
     compileOptions {

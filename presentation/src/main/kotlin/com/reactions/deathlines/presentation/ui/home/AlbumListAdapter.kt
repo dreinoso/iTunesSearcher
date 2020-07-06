@@ -13,10 +13,10 @@ import com.reactions.deathlines.domain.entity.Entity
 import com.reactions.deathlines.presentation.R
 import com.reactions.deathlines.presentation.databinding.ItemAlbumBinding
 
-class AlbumListAdapter : PagedListAdapter<Entity.Album, AlbumListAdapter.DataHolder>(AlbumDiffCallback()) {
+class AlbumListAdapter : PagedListAdapter<Entity.Song, AlbumListAdapter.DataHolder>(AlbumDiffCallback()) {
 
-    private val onAlbumItemClickSubject = PublishSubject.create<Entity.Album>()
-    val albumItemClickEvent: Observable<Entity.Album> = onAlbumItemClickSubject
+    private val onAlbumItemClickSubject = PublishSubject.create<Entity.Song>()
+    val albumItemClickEvent: Observable<Entity.Song> = onAlbumItemClickSubject
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataHolder {
         val bind: ItemAlbumBinding = DataBindingUtil.inflate<ViewDataBinding>(LayoutInflater.from(parent.context),
@@ -33,7 +33,7 @@ class AlbumListAdapter : PagedListAdapter<Entity.Album, AlbumListAdapter.DataHol
     inner class DataHolder(private var itemAlbumBinding: ItemAlbumBinding) : RecyclerView.ViewHolder
     (itemAlbumBinding.root), View.OnClickListener {
 
-        fun bind(albumItem: Entity.Album) {
+        fun bind(albumItem: Entity.Song) {
             if (itemAlbumBinding!= null) {
                 itemAlbumBinding!!.albumEntity = albumItem
                 itemAlbumBinding!!.root.setOnClickListener(this)
@@ -45,7 +45,7 @@ class AlbumListAdapter : PagedListAdapter<Entity.Album, AlbumListAdapter.DataHol
         override fun onClick(view: View) {
             val album = getItem((adapterPosition))
             album?.let {
-                val product: Entity.Album = album
+                val product: Entity.Song = album
                 onAlbumItemClickSubject.onNext(product)
             }
         }

@@ -53,7 +53,7 @@ class HomeFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
         }
     }
 
-    private fun showAlbums(albums: ResultState<PagedList<Entity.Album>>) {
+    private fun showAlbums(albums: ResultState<PagedList<Entity.Song>>) {
         when (albums) {
             is ResultState.Success -> {
                 hideLoading()

@@ -5,14 +5,16 @@ import androidx.lifecycle.MutableLiveData
 import androidx.paging.PagedList
 import com.reactions.deathlines.data.datasource.album.AlbumsApiDataSource
 import com.reactions.deathlines.data.datasource.album.AlbumsDatabaseDataSource
-import com.reactions.deathlines.data.datasource.album.getAlbums
+import com.reactions.deathlines.data.datasource.album.getSongs
+import com.reactions.deathlines.data.datasource.album.getSongsFromAlbum
 import com.reactions.deathlines.domain.common.ResultState
 import com.reactions.deathlines.domain.entity.Entity
 
-class RepoBoundaryCallback(
+class SongsAlbumRepoBoundaryCallback(
         private val apiSource: AlbumsApiDataSource,
-        private val databaseSource: AlbumsDatabaseDataSource
-) : PagedList.BoundaryCallback<Entity.Album>() {
+        private val databaseSource: AlbumsDatabaseDataSource,
+        private val collectionId: Int
+) : PagedList.BoundaryCallback<Entity.Song>() {
 
     // keep the last requested page. When the request is successful, increment the page number.
     private var lastRequestedPage = 1
@@ -34,7 +36,7 @@ class RepoBoundaryCallback(
     /**
      * When all items in the database were loaded, we need to send a request to the backend for more items.
      */
-    override fun onItemAtEndLoaded(itemAtEnd: Entity.Album) {
+    override fun onItemAtEndLoaded(itemAtEnd: Entity.Song) {
         requestAndSaveData()
     }
 
@@ -42,7 +44,7 @@ class RepoBoundaryCallback(
         if (isRequestInProgress) return
 
         isRequestInProgress = true
-        getAlbums(apiSource, lastRequestedPage, NETWORK_PAGE_SIZE) { albums ->
+        getSongsFromAlbum(apiSource, collectionId) { albums ->
             when (albums) {
                 is ResultState.Success -> {
                     databaseSource.persist(albums.data) {

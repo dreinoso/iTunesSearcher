@@ -3,7 +3,6 @@ package com.com.reactions.deathlines.data.api
 import com.google.gson.annotations.SerializedName
 import io.reactivex.Single
 import retrofit2.http.GET
-import retrofit2.http.Path
 import retrofit2.http.Query
 
 /**
@@ -11,33 +10,32 @@ import retrofit2.http.Query
  */
 interface AlbumApi {
 
-    /**
-     * Get all albums
-     */
-    @GET("albums")
-    fun getAlbums(@Query("_start") page: Int,
-                  @Query("_limit") pageSize: Int): Single<List<Dto.Album>>
+    @GET("/search")
+    fun  getSongs(
+            @Query("term") term: String,
+            @Query("mediaType") mediaType: String,
+            @Query("limit") pageSize: Int)
+            : Single<List<Dto.Song>>
 
-    /**
-     * Get an album photo by the album id
-     */
-    @GET("albums/{albumId}/photos")
-    fun getPhotosByAlbumId(@Path("albumId") albumId: Int): Single<List<Dto.Photo>>
+    @GET("/lookup")
+    fun getSongsFromAlbum(
+            @Query("id") page: Int,
+            @Query("entity") entity: String)
+            : Single<List<Dto.Song>>
 
     sealed class Dto {
-
-        data class Album(
-                @SerializedName("id") val id: Long,
-                @SerializedName("userId") val userId: Long,
-                @SerializedName("title") val title: String
-        ) : Dto()
-
-        data class Photo(
-                @SerializedName("id") val id: Long,
-                @SerializedName("albumId") val albumId: Long,
-                @SerializedName("title") val title: String,
-                @SerializedName("url") val url: String,
-                @SerializedName("thumbnailUrl") val thumbnailUrl: String
+        data class Song(
+                @SerializedName("artistId") val artistId: Long,
+                @SerializedName("collectionId") val collectionId: Long,
+                @SerializedName("trackId") val trackId: Long,
+                @SerializedName("kind") val kind: String,
+                @SerializedName("artistName") val artistName: String,
+                @SerializedName("collectionName") val collectionName: String,
+                @SerializedName("trackName") val trackName: String,
+                @SerializedName("trackPrice") val trackPrice: String,
+                @SerializedName("primaryGenreName") val primaryGenreName: String,
+                @SerializedName("previewUrl") val previewUrl: String,
+                @SerializedName("artworkUrl100") val artworkUrl100: String
         ) : Dto()
     }
 }

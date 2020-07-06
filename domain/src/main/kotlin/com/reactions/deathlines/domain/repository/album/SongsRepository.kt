@@ -7,17 +7,10 @@ import com.reactions.deathlines.domain.common.ResultState
 import com.reactions.deathlines.domain.entity.Entity
 import com.reactions.deathlines.domain.repository.BaseRepository
 
-/**
- * Album repository
- */
-interface AlbumsRepository : BaseRepository {
+interface SongsRepository : BaseRepository {
 
-    /**
-     * Perform
-     */
-    fun getAlbums(): Flowable<ResultState<PagedList<Entity.Album>>>
+    fun getSongs(songName: String): Flowable<ResultState<PagedList<Entity.Song>>>
 
-    fun deleteAlbum(album: Entity.Album): Single<ResultState<Int>>
+    fun getSongsFromAlbum(collectionId: Int): Flowable<ResultState<PagedList<Entity.Song>>>
 
-    //fun loadAlbums(pageNumber: Int): Single<ResultState<List<Entity.Album>>>
 }
