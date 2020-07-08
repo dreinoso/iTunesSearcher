@@ -26,7 +26,7 @@
         tools:layout="@layout/fragment_album_detail">
 
         <argument
-            android:name="clickedAlbum"
+            android:name="trackId"
             app:argType="string" />
 
     </fragment>

@@ -13,7 +13,9 @@ import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.item_song.view.*
 
-class SongListAdapter : PagedListAdapter<Entity.Song, SongListAdapter.SongViewHolder>(SongDiffCallback()) {
+class SongListAdapter (
+        private val songClickedListener: SongClickedListener
+) : PagedListAdapter<Entity.Song, SongListAdapter.SongViewHolder>(SongDiffCallback()) {
 
     private val onAlbumItemClickSubject = PublishSubject.create<Entity.Song>()
     val albumItemClickEvent: Observable<Entity.Song> = onAlbumItemClickSubject
@@ -50,11 +52,14 @@ class SongListAdapter : PagedListAdapter<Entity.Song, SongListAdapter.SongViewHo
         }
 
         override fun onClick(view: View) {
-            val album = getItem((adapterPosition))
-            album?.let {
-                val product: Entity.Song = album
-                onAlbumItemClickSubject.onNext(product)
+            val songClicked = getItem((adapterPosition))
+            songClicked?.let {
+                songClickedListener.onSongClicked(songClicked)
             }
         }
+    }
+
+    interface SongClickedListener {
+        fun onSongClicked(song : Entity.Song)
     }
 }

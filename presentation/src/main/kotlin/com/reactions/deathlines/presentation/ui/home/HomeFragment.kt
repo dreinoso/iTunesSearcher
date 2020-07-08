@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.findNavController
 import androidx.paging.PagedList
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -21,7 +22,7 @@ import com.reactions.deathlines.presentation.ui.base.BaseFragment
 import kotlinx.android.synthetic.main.fragment_home.*
 import javax.inject.Inject
 
-class HomeFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
+class HomeFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, SongListAdapter.SongClickedListener {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -29,7 +30,7 @@ class HomeFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
     private var isLoading = false
 
     private val adapter: SongListAdapter by lazy {
-        SongListAdapter()
+        SongListAdapter(this)
     }
 
     private val viewModel: HomeViewModel by lazy {
@@ -105,5 +106,9 @@ class HomeFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     override fun onRefresh() {
+    }
+
+    override fun onSongClicked(song: Entity.Song) {
+        view?.findNavController()?.navigate(HomeFragmentDirections.navigateToAlbumDetailFragment(song.trackId.toString()))
     }
 }
