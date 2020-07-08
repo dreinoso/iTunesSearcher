@@ -1,17 +1,18 @@
 package com.reactions.deathlines.data.repository.album
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.PagedList
-import com.reactions.deathlines.data.datasource.album.AlbumsApiDataSource
-import com.reactions.deathlines.data.datasource.album.AlbumsDatabaseDataSource
-import com.reactions.deathlines.data.datasource.album.getSongs
+import com.reactions.deathlines.data.datasource.song.AlbumsApiDataSource
+import com.reactions.deathlines.data.datasource.song.SongDatabaseDataSource
+import com.reactions.deathlines.data.datasource.song.getSongs
 import com.reactions.deathlines.domain.common.ResultState
 import com.reactions.deathlines.domain.entity.Entity
 
 class SongsRepoBoundaryCallback(
         private val apiSource: AlbumsApiDataSource,
-        private val databaseSource: AlbumsDatabaseDataSource,
+        private val databaseSource: SongDatabaseDataSource,
         private val songName: String
 ) : PagedList.BoundaryCallback<Entity.Song>() {
 
@@ -43,16 +44,17 @@ class SongsRepoBoundaryCallback(
         if (isRequestInProgress) return
 
         isRequestInProgress = true
-        getSongs(apiSource, songName) { albums ->
-            when (albums) {
+        getSongs(apiSource, songName) { songs ->
+            Log.d(this.javaClass.name, "requestAndSaveData: $songs")
+            when (songs) {
                 is ResultState.Success -> {
-                    databaseSource.persist(albums.data) {
+                    databaseSource.persist(songs.data) {
                         lastRequestedPage++
                         isRequestInProgress = false
                     }
                 }
                 is ResultState.Error -> {
-                    _networkErrors.postValue(albums.throwable.message)
+                    _networkErrors.postValue(songs.throwable.message)
                     isRequestInProgress = false
                 }
             }

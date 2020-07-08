@@ -2,6 +2,7 @@ package com.reactions.deathlines.presentation.ui.home
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,8 +28,8 @@ class HomeFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private var isLoading = false
 
-    private val adapter: AlbumListAdapter by lazy {
-        AlbumListAdapter()
+    private val adapter: SongListAdapter by lazy {
+        SongListAdapter()
     }
 
     private val viewModel: HomeViewModel by lazy {
@@ -46,26 +47,20 @@ class HomeFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
         return binding.root
     }
 
-    private fun onAlbumDeleted(resultState: ResultState<Int>) {
+    private fun onSongsLoaded(resultState: ResultState<PagedList<Entity.Song>>) {
+        Log.d(tag, "onSongsLoaded resultState: $resultState")
         when (resultState) {
-            is ResultState.Success -> Toast.makeText(activity, "album ${resultState.data} deleted", Toast.LENGTH_SHORT).show()
-            is ResultState.Error -> Toast.makeText(activity, resultState.throwable.message, Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    private fun showAlbums(albums: ResultState<PagedList<Entity.Song>>) {
-        when (albums) {
             is ResultState.Success -> {
                 hideLoading()
-                adapter.submitList(albums.data)
+                adapter.submitList(resultState.data)
             }
             is ResultState.Error -> {
                 hideLoading()
-                Toast.makeText(activity, albums.throwable.message, Toast.LENGTH_SHORT).show()
-                adapter.submitList(albums.data)
+                Toast.makeText(activity, resultState.throwable.message, Toast.LENGTH_SHORT).show()
+                adapter.submitList(resultState.data)
             }
             is ResultState.Loading -> {
-                adapter.submitList(albums.data)
+                adapter.submitList(resultState.data)
             }
         }
         isLoading = false
@@ -74,25 +69,25 @@ class HomeFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
 
     @SuppressLint("CheckResult")
     private fun initView() {
-        fragmentHomeSwp.isRefreshing = true
+//        fragmentHomeSwp.isRefreshing = true
         fragmentHomeSwp.setOnRefreshListener(this)
         fragmentHomeRcyMain.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         fragmentHomeRcyMain.setHasFixedSize(true)
         fragmentHomeRcyMain.adapter = adapter
 
         adapter.albumItemClickEvent.applyIoScheduler().subscribe { it ->
-            viewModel.deleteAlbum(it)
+            Log.d(tag, "itemclickevent"            )
         }
 
-        showLoading()
+//        showLoading()
     }
 
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        initView()
-//        observe(viewModel.albumsLiveData, ::showAlbums)
+        initView()
+
         binding.songSearch.setOnQueryTextListener(object : android.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextChange(newText: String?): Boolean {
                 return true
@@ -100,13 +95,13 @@ class HomeFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
 
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (!query.isNullOrBlank()) {
-                    viewModel.getSongs()
+                    Log.d(tag, "onQueryTextSubmit: $query")
+                    viewModel.getSongs(query)
                 }
                 return true
             }
         })
-        observe(viewModel.deletedAlbumLiveData, ::onAlbumDeleted)
-        viewModel.getSongs()
+        observe(viewModel.albumsLiveData, ::onSongsLoaded)
     }
 
     override fun onRefresh() {

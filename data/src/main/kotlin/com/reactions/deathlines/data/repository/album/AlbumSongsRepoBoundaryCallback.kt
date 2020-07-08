@@ -3,16 +3,15 @@ package com.reactions.deathlines.data.repository.album
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.PagedList
-import com.reactions.deathlines.data.datasource.album.AlbumsApiDataSource
-import com.reactions.deathlines.data.datasource.album.AlbumsDatabaseDataSource
-import com.reactions.deathlines.data.datasource.album.getSongs
-import com.reactions.deathlines.data.datasource.album.getSongsFromAlbum
+import com.reactions.deathlines.data.datasource.song.AlbumsApiDataSource
+import com.reactions.deathlines.data.datasource.song.SongDatabaseDataSource
+import com.reactions.deathlines.data.datasource.song.getSongsFromAlbum
 import com.reactions.deathlines.domain.common.ResultState
 import com.reactions.deathlines.domain.entity.Entity
 
-class SongsAlbumRepoBoundaryCallback(
+class AlbumSongsRepoBoundaryCallback(
         private val apiSource: AlbumsApiDataSource,
-        private val databaseSource: AlbumsDatabaseDataSource,
+        private val databaseSource: SongDatabaseDataSource,
         private val collectionId: Int
 ) : PagedList.BoundaryCallback<Entity.Song>() {
 

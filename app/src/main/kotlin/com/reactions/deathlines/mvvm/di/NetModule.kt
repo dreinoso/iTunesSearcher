@@ -2,7 +2,7 @@ package com.reactions.deathlines.mvvm.di
 
 import dagger.Module
 import dagger.Provides
-import com.com.reactions.deathlines.data.api.AlbumApi
+import com.com.reactions.deathlines.data.api.SongApi
 import com.reactions.deathlines.mvvm.BuildConfig
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -41,6 +41,6 @@ class NetModule {
     }
 
     @Provides
-    fun providesAlbumApi(retrofit: Retrofit): AlbumApi = retrofit.create(AlbumApi::class.java)
+    fun providesAlbumApi(retrofit: Retrofit): SongApi = retrofit.create(SongApi::class.java)
 
 }

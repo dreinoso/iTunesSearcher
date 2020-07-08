@@ -8,18 +8,17 @@ import androidx.room.PrimaryKey
 sealed class SongData {
 
     @Entity(tableName = "song_table")
-    data class Song(@ColumnInfo(name = "id") @PrimaryKey(autoGenerate = true) val id: Long = 0,
-                    @ColumnInfo(name = "user_id") val artistId: Long,
-                    @ColumnInfo(name = "user_id") val collectionId: Long,
-                    @ColumnInfo(name = "user_id") val trackId: Long,
-                    @ColumnInfo(name = "user_id") val kind: String,
-                    @ColumnInfo(name = "user_id") val artistName: String,
-                    @ColumnInfo(name = "user_id") val collectionName: String,
-                    @ColumnInfo(name = "user_id") val trackName: String,
-                    @ColumnInfo(name = "user_id") val trackPrice: String,
-                    @ColumnInfo(name = "user_id") val primaryGenreName: String,
-                    @ColumnInfo(name = "user_id") val previewUrl: String,
-                    @ColumnInfo(name = "title") val artworkUrl100: String) : SongData()
+    data class Song(@ColumnInfo(name = "trackId") @PrimaryKey(autoGenerate = false) val trackId: Long,
+                    @ColumnInfo(name = "artistId") val artistId: Long,
+                    @ColumnInfo(name = "collectionId") val collectionId: Long,
+                    @ColumnInfo(name = "kind") val kind: String,
+                    @ColumnInfo(name = "artistName") val artistName: String,
+                    @ColumnInfo(name = "collectionName") val collectionName: String,
+                    @ColumnInfo(name = "trackName") val trackName: String,
+                    @ColumnInfo(name = "trackPrice") val trackPrice: String,
+                    @ColumnInfo(name = "primaryGenreName") val primaryGenreName: String,
+                    @ColumnInfo(name = "previewUrl") val previewUrl: String,
+                    @ColumnInfo(name = "artworkUrl100") val artworkUrl100: String) : SongData()
 
     @Entity(tableName = "album_photo_table")
     data class Photo(@ColumnInfo(name = "id") @PrimaryKey(autoGenerate = false) val id: Long,

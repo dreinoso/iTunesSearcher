@@ -6,7 +6,7 @@ import com.reactions.deathlines.domain.common.ResultState
 import com.reactions.deathlines.domain.entity.Entity
 import com.reactions.deathlines.domain.repository.album.SongsRepository
 
-class GetSongsFromAlbumCaseImpl(
+class GetSongsFromAlbumUseCaseImpl(
         private val repository: SongsRepository) : GetSongsFromAlbumUseCase {
 
     override fun getSongs(collectionId: Int): Flowable<ResultState<PagedList<Entity.Song>>> =

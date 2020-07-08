@@ -21,7 +21,7 @@ interface BaseDao<T> {
     @Insert(onConflict = IGNORE)
     fun insert(t: T): Long
 
-    @Insert(onConflict = REPLACE)
+    @Insert(onConflict = IGNORE)
     fun insert(ts: List<T>)
 
     @Update(onConflict = REPLACE)

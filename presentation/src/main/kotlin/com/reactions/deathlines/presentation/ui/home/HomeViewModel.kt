@@ -1,5 +1,6 @@
 package com.reactions.deathlines.presentation.ui.home
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
@@ -12,48 +13,35 @@ import com.reactions.deathlines.presentation.common.OperationLiveData
 import com.reactions.deathlines.presentation.ui.base.BaseViewModel
 import javax.inject.Inject
 
-class HomeViewModel @Inject constructor(private val getAlbumsUseCase: GetSongsFromSongUseCase) : BaseViewModel() {
+class HomeViewModel @Inject constructor(private val getSongsFromSongUseCase: GetSongsFromSongUseCase) : BaseViewModel() {
 
     private var tempDispossable: Disposable? = null
+    private var songName =""
     //var page = 1
-    private val albumToBeDeleted = MutableLiveData<Entity.Song>()
+    val songsLiveData = MutableLiveData<ResultState<PagedList<Entity.Song>>>()
+    val albumSongsLiveData = MutableLiveData<PagedList<Entity.Song>>()
     //private val pageLiveData by lazy { MutableLiveData<String>()/*.defaultValue(1)*/ }
     //val pageNumberLiveData by lazy { MutableLiveData<Int>().defaultValue(1) }
-    private val fetch = MutableLiveData<String>()
-
-    val deletedAlbumLiveData: LiveData<ResultState<Int>> = Transformations.switchMap(albumToBeDeleted) {
-        OperationLiveData<ResultState<Int>> {
-            getAlbumsUseCase.loadSongs(it).toFlowable().subscribe { resultState ->
-                postValue(resultState)
-            }
-        }
-    }
-
-    fun deleteAlbum(album: Entity.Song) {
-        albumToBeDeleted.postValue(album)
-    }
+    private val songNameLiveData = MutableLiveData<String>()
 
     //val networkErrors: LiveData<String> = Transformations.switchMap(repoResult) { it -> it.networkErrors }
 
-    val albumsLiveData: LiveData<ResultState<PagedList<Entity.Song>>> = Transformations.switchMap(fetch) {
+    val albumsLiveData: LiveData<ResultState<PagedList<Entity.Song>>> = Transformations.switchMap(songNameLiveData) {
         OperationLiveData<ResultState<PagedList<Entity.Song>>> {
 
             if (tempDispossable?.isDisposed != true)
             //if (tempDispossable != null && !tempDispossable!!.isDisposed)
                 tempDispossable?.dispose()
-            tempDispossable = getAlbumsUseCase.getSongs().subscribe { resultState ->
+            tempDispossable = getSongsFromSongUseCase.getSongs(songName).subscribe { resultState ->
                 postValue((resultState))
-                /*when (resultState) {
-                    is ResultState.Success ->
-                        pageNumberLiveData.postValue(resultState.data.size)
-                }*/
             }
             tempDispossable?.track()
         }
     }
 
-    fun getSongs() {
-        fetch.postValue("")
+    fun getSongs(songName: String) {
+        this.songName = songName
+        songNameLiveData.postValue("")
         //page++
     }
 }

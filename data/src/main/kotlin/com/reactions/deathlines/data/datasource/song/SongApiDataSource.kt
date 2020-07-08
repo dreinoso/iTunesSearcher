@@ -1,4 +1,4 @@
-package com.reactions.deathlines.data.datasource.album
+package com.reactions.deathlines.data.datasource.song
 
 import android.annotation.SuppressLint
 import io.reactivex.Single
@@ -34,9 +34,6 @@ fun getSongsFromAlbum(
             })
 }
 
-/**
- * Album network data source
- */
 interface AlbumsApiDataSource : BaseDataSource {
 
     fun getSongs(song: String): Single<List<Entity.Song>>

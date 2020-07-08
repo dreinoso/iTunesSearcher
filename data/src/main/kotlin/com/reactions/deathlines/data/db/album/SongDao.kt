@@ -10,22 +10,28 @@ import com.reactions.deathlines.data.db.BaseDao
 @Dao
 interface SongDao : BaseDao<SongData.Song> {
 
-    @Query("SELECT * FROM song_table WHERE id = :id")
+    @Query("SELECT * FROM song_table WHERE trackId = :id")
     override fun select(id: Long): Flowable<SongData.Song>
 
-    @Query("SELECT * FROM song_table ORDER BY id")
+    @Query("SELECT * FROM song_table ORDER BY trackId")
     override fun selectAllPaged(): DataSource.Factory<Int, SongData.Song>
+
+    @Query("SELECT * FROM song_table WHERE trackName LIKE :songName ORDER BY trackId")
+    fun selectAllPagedFromSong(songName: String): DataSource.Factory<Int, SongData.Song>
+
+    @Query("SELECT * FROM song_table WHERE collectionId = :collectionId ORDER BY trackId")
+    fun selectAllPagedFromAlbum(collectionId: Int): DataSource.Factory<Int, SongData.Song>
 
     @Query("DELETE FROM song_table")
     override fun truncate()
 
     @Transaction
     fun replace(songs: List<SongData.Song>) {
-        val firstId: Long = songs.firstOrNull()?.id ?: run {
+        val firstId: Long = songs.firstOrNull()?.trackId ?: run {
             0L
         }
 
-        val lastId = songs.lastOrNull()?.id ?: run {
+        val lastId = songs.lastOrNull()?.trackId ?: run {
             Long.MAX_VALUE
         }
 
@@ -33,6 +39,6 @@ interface SongDao : BaseDao<SongData.Song> {
         insert(songs)
     }
 
-    @Query("DELETE FROM song_table WHERE id BETWEEN :firstId AND :lastId")
+    @Query("DELETE FROM song_table WHERE trackId BETWEEN :firstId AND :lastId")
     fun deleteRange(firstId: Long, lastId: Long)
 }

@@ -8,14 +8,14 @@ import retrofit2.http.Query
 /**
  * Albums api
  */
-interface AlbumApi {
+interface SongApi {
 
     @GET("/search")
     fun  getSongs(
             @Query("term") term: String,
             @Query("mediaType") mediaType: String,
             @Query("limit") pageSize: Int)
-            : Single<List<Dto.Song>>
+            : Single<Dto.SearchResponse>
 
     @GET("/lookup")
     fun getSongsFromAlbum(
@@ -36,6 +36,11 @@ interface AlbumApi {
                 @SerializedName("primaryGenreName") val primaryGenreName: String,
                 @SerializedName("previewUrl") val previewUrl: String,
                 @SerializedName("artworkUrl100") val artworkUrl100: String
+        ) : Dto()
+
+        data class SearchResponse(
+                @SerializedName("resultCount") val resultsCount: Long,
+                @SerializedName("results") val results: List<Song>
         ) : Dto()
     }
 }
