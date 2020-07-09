@@ -9,6 +9,8 @@ import com.reactions.deathlines.domain.repository.BaseRepository
 
 interface SongsRepository : BaseRepository {
 
+    fun getSongFromTrackId(trackId: Int): Single<ResultState<Entity.Song>>
+
     fun getSongs(songName: String): Flowable<ResultState<PagedList<Entity.Song>>>
 
     fun getSongsFromAlbum(collectionId: Int): Flowable<ResultState<PagedList<Entity.Song>>>

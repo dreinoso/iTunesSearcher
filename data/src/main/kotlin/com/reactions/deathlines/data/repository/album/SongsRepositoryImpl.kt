@@ -11,11 +11,16 @@ import com.reactions.deathlines.data.repository.BaseRepositoryImpl
 import com.reactions.deathlines.domain.common.ResultState
 import com.reactions.deathlines.domain.entity.Entity
 import com.reactions.deathlines.domain.repository.album.SongsRepository
+import io.reactivex.Single
 
 class SongsRepositoryImpl(
         private val apiSource: AlbumsApiDataSource,
         private val databaseSource: SongDatabaseDataSource
 ) : BaseRepositoryImpl<Entity.Song>(), SongsRepository {
+
+    override fun getSongFromTrackId(trackId: Int): Single<ResultState<Entity.Song>> {
+        TODO("Not yet implemented")
+    }
 
     override fun getSongs(songName: String): Flowable<ResultState<PagedList<Entity.Song>>> {
         val dataSourceFactory = databaseSource.getSongs(songName)

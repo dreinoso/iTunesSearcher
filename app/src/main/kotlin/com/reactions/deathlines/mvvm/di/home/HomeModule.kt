@@ -10,10 +10,7 @@ import com.reactions.deathlines.data.datasource.song.SongDatabaseDataSourceImpl
 import com.reactions.deathlines.data.db.album.SongDao
 import com.reactions.deathlines.data.repository.album.SongsRepositoryImpl
 import com.reactions.deathlines.domain.repository.album.SongsRepository
-import com.reactions.deathlines.domain.usecase.album.GetSongsFromAlbumUseCase
-import com.reactions.deathlines.domain.usecase.album.GetSongsFromAlbumUseCaseImpl
-import com.reactions.deathlines.domain.usecase.album.GetSongsFromSongUseCase
-import com.reactions.deathlines.domain.usecase.album.GetSongsFromSongCaseImpl
+import com.reactions.deathlines.domain.usecase.album.*
 import java.util.concurrent.Executors
 
 @Module
@@ -42,4 +39,7 @@ class HomeModule {
 
     @Provides
     fun provideGetSongsFromAlbumUseCaseImpl(repository: SongsRepository): GetSongsFromAlbumUseCase = GetSongsFromAlbumUseCaseImpl(repository)
+
+    @Provides
+    fun provideGetSongFromTrackIdUseCaseImpl(repository: SongsRepository): GetSongFromTrackIdUseCase = GetSongFromTrackIdUseCaseImpl(repository)
 }
