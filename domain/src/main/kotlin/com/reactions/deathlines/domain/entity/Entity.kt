@@ -9,7 +9,7 @@ sealed class Entity {
             val artistId: Long,
             val collectionId: Long,
             val trackId: Long,
-            val kind: String,
+            val wrapperType: String,
             val artistName: String,
             val collectionName: String,
             val trackName: String,

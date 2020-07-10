@@ -11,7 +11,7 @@ sealed class SongData {
     data class Song(@ColumnInfo(name = "trackId") @PrimaryKey(autoGenerate = false) val trackId: Long,
                     @ColumnInfo(name = "artistId") val artistId: Long,
                     @ColumnInfo(name = "collectionId") val collectionId: Long,
-                    @ColumnInfo(name = "kind") val kind: String,
+                    @ColumnInfo(name = "wrapperType") val wrapperType: String,
                     @ColumnInfo(name = "artistName") val artistName: String,
                     @ColumnInfo(name = "collectionName") val collectionName: String,
                     @ColumnInfo(name = "trackName") val trackName: String,

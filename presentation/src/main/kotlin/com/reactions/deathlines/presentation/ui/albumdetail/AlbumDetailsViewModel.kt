@@ -1,5 +1,6 @@
 package com.reactions.deathlines.presentation.ui.albumdetail
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
@@ -17,17 +18,18 @@ class AlbumDetailsViewModel @Inject constructor(
         private val getSongFromTrackIdUseCase: GetSongFromTrackIdUseCase,
         private val getSongsFromAlbumUseCase: GetSongsFromAlbumUseCase) : BaseViewModel() {
 
+    val currentSongLiveData = MutableLiveData<ResultState<Entity.Song>>()
     private var tempDisposable: Disposable? = null
-    private val songNameLiveData = MutableLiveData<String>()
+    private val fetch = MutableLiveData<String>()
     private var trackId = 0
-    private val currentSongLiveData = MutableLiveData<ResultState<Entity.Song>>()
 
-    val albumSongsLiveData: LiveData<ResultState<PagedList<Entity.Song>>> = Transformations.switchMap(songNameLiveData) {
+    val  albumSongsLiveData: LiveData<ResultState<PagedList<Entity.Song>>> = Transformations.switchMap(fetch) {
         OperationLiveData<ResultState<PagedList<Entity.Song>>> {
             if (tempDisposable?.isDisposed != true)
                 tempDisposable?.dispose()
             tempDisposable = getSongsFromAlbumUseCase.getSongs(trackId).subscribe { resultState ->
-                postValue((resultState))
+                Log.d(this.javaClass.name, "resultState: $resultState")
+                postValue(resultState)
             }
             tempDisposable?.track()
         }
@@ -35,7 +37,7 @@ class AlbumDetailsViewModel @Inject constructor(
 
     fun getAlbumSongs(trackId: Int) {
         this.trackId = trackId
-        songNameLiveData.postValue("")
+        fetch.postValue("")
     }
 
     fun getCurrentSong(trackId: Int) {

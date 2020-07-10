@@ -109,6 +109,6 @@ class HomeFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, SongL
     }
 
     override fun onSongClicked(song: Entity.Song) {
-        view?.findNavController()?.navigate(HomeFragmentDirections.navigateToAlbumDetailFragment(song.trackId.toString()))
+        view?.findNavController()?.navigate(HomeFragmentDirections.navigateToAlbumDetailFragment(song.collectionId.toString()))
     }
 }

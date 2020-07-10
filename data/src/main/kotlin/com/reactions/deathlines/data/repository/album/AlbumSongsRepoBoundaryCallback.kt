@@ -1,5 +1,6 @@
 package com.reactions.deathlines.data.repository.album
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.PagedList
@@ -43,16 +44,17 @@ class AlbumSongsRepoBoundaryCallback(
         if (isRequestInProgress) return
 
         isRequestInProgress = true
-        getSongsFromAlbum(apiSource, collectionId) { albums ->
-            when (albums) {
+        getSongsFromAlbum(apiSource, collectionId) { songs ->
+            Log.d(this.javaClass.name, "requestAndSaveData: $songs")
+            when (songs) {
                 is ResultState.Success -> {
-                    databaseSource.persist(albums.data) {
+                    databaseSource.persist(songs.data) {
                         lastRequestedPage++
                         isRequestInProgress = false
                     }
                 }
                 is ResultState.Error -> {
-                    _networkErrors.postValue(albums.throwable.message)
+                    _networkErrors.postValue(songs.throwable.message)
                     isRequestInProgress = false
                 }
             }

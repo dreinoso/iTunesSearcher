@@ -20,5 +20,10 @@ class SongApiDataSourceImpl(private val api: SongApi) : AlbumsApiDataSource {
     override fun getSongsFromAlbum(collectionId: Int): Single<List<Entity.Song>> =
             api.getSongsFromAlbum(collectionId, ENTITY)
                     .applyIoScheduler()
-                    .map { item -> item.map { it.map() } }
+                    .map { item ->
+                        item.results.filter { it.wrapperType != "collection" }.map {
+
+                                it.map()
+
+                        }}
 }

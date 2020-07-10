@@ -6,6 +6,7 @@ import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
 import com.reactions.deathlines.mvvm.di.qualifier.ViewModelKey
+import com.reactions.deathlines.presentation.ui.albumdetail.AlbumDetailsViewModel
 import com.reactions.deathlines.presentation.ui.home.HomeViewModel
 
 @Module
@@ -18,4 +19,9 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(HomeViewModel::class)
     internal abstract fun bindHomeViewModel(viewModel: HomeViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(AlbumDetailsViewModel::class)
+    internal abstract fun bindAlbumDetailViewModel(viewModel: AlbumDetailsViewModel): ViewModel
 }

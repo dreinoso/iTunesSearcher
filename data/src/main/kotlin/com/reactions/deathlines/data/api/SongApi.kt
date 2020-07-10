@@ -19,16 +19,16 @@ interface SongApi {
 
     @GET("/lookup")
     fun getSongsFromAlbum(
-            @Query("id") page: Int,
+            @Query("id") id: Int,
             @Query("entity") entity: String)
-            : Single<List<Dto.Song>>
+            : Single<Dto.SearchResponse>
 
     sealed class Dto {
         data class Song(
                 @SerializedName("artistId") val artistId: Long,
                 @SerializedName("collectionId") val collectionId: Long,
                 @SerializedName("trackId") val trackId: Long,
-                @SerializedName("kind") val kind: String,
+                @SerializedName("wrapperType") val wrapperType: String,
                 @SerializedName("artistName") val artistName: String,
                 @SerializedName("collectionName") val collectionName: String,
                 @SerializedName("trackName") val trackName: String,
