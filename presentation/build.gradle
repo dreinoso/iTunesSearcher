@@ -25,6 +25,12 @@ android {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField("String", "PURCHASE_URL", "\"https://www.apple.com/itunes\"")
+        }
+        debug {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField("String", "PURCHASE_URL", "\"https://www.apple.com/itunes\"")
         }
     }
     compileOptions {

@@ -19,8 +19,10 @@ import com.reactions.deathlines.domain.entity.Entity
 import com.reactions.deathlines.presentation.common.extension.observe
 import com.reactions.deathlines.presentation.databinding.FragmentAlbumDetailBinding
 import com.reactions.deathlines.presentation.ui.base.BaseFragment
+import com.reactions.deathlines.presentation.BuildConfig
 import com.squareup.picasso.OkHttp3Downloader
 import com.squareup.picasso.Picasso
+
 import javax.inject.Inject
 
 class AlbumDetailFragment : BaseFragment() {
@@ -94,7 +96,7 @@ class AlbumDetailFragment : BaseFragment() {
     }
 
     fun onPurchaseBtnClicked(view: View) {
-        val iTunesPurchaseUrl = "https://www.apple.com/itunes/"
+        val iTunesPurchaseUrl  = BuildConfig.PURCHASE_URL
         val intent = Intent(Intent.ACTION_VIEW)
         intent.data = Uri.parse(iTunesPurchaseUrl)
         startActivity(intent)
