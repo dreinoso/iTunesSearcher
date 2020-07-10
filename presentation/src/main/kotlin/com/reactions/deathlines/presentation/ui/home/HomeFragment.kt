@@ -14,7 +14,6 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
 import androidx.paging.PagedList
 import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.reactions.deathlines.domain.common.ResultState
 import com.reactions.deathlines.domain.entity.Entity
 import com.reactions.deathlines.presentation.common.extension.applyIoScheduler
@@ -24,7 +23,7 @@ import com.reactions.deathlines.presentation.ui.base.BaseFragment
 import kotlinx.android.synthetic.main.fragment_home.*
 import javax.inject.Inject
 
-class HomeFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, SongListAdapter.SongClickedListener {
+class HomeFragment : BaseFragment(), SongListAdapter.SongClickedListener {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -67,13 +66,10 @@ class HomeFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, SongL
             }
         }
         isLoading = false
-        fragmentHomeSwp.isRefreshing = false
     }
 
     @SuppressLint("CheckResult")
     private fun initView() {
-//        fragmentHomeSwp.isRefreshing = true
-        fragmentHomeSwp.setOnRefreshListener(this)
         fragmentHomeRcyMain.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         fragmentHomeRcyMain.setHasFixedSize(true)
         fragmentHomeRcyMain.adapter = adapter
@@ -104,9 +100,6 @@ class HomeFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, SongL
             }
         })
         observe(viewModel.albumsLiveData, ::onSongsLoaded)
-    }
-
-    override fun onRefresh() {
     }
 
     override fun onSongClicked(song: Entity.Song) {
