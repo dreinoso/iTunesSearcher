@@ -16,7 +16,6 @@ import androidx.paging.PagedList
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.reactions.deathlines.domain.common.ResultState
 import com.reactions.deathlines.domain.entity.Entity
-import com.reactions.deathlines.presentation.common.extension.applyIoScheduler
 import com.reactions.deathlines.presentation.common.extension.observe
 import com.reactions.deathlines.presentation.databinding.FragmentHomeBinding
 import com.reactions.deathlines.presentation.ui.base.BaseFragment
@@ -29,6 +28,8 @@ class HomeFragment : BaseFragment(), SongListAdapter.SongClickedListener {
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
     private var isLoading = false
+    private var _binding: FragmentHomeBinding? = null
+    private val binding get() = _binding!!
 
     private val adapter: SongListAdapter by lazy {
         SongListAdapter(this)
@@ -37,9 +38,6 @@ class HomeFragment : BaseFragment(), SongListAdapter.SongClickedListener {
     private val viewModel: HomeViewModel by lazy {
         ViewModelProviders.of(this, viewModelFactory).get(HomeViewModel::class.java)
     }
-
-    private var _binding: FragmentHomeBinding? = null
-    private val binding get() = _binding!!
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -54,6 +52,7 @@ class HomeFragment : BaseFragment(), SongListAdapter.SongClickedListener {
         when (resultState) {
             is ResultState.Success -> {
                 hideLoading()
+                binding.ivLogo.visibility = View.GONE
                 adapter.submitList(resultState.data)
             }
             is ResultState.Error -> {
@@ -73,12 +72,6 @@ class HomeFragment : BaseFragment(), SongListAdapter.SongClickedListener {
         fragmentHomeRcyMain.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         fragmentHomeRcyMain.setHasFixedSize(true)
         fragmentHomeRcyMain.adapter = adapter
-
-        adapter.albumItemClickEvent.applyIoScheduler().subscribe { it ->
-            Log.d(tag, "itemclickevent"            )
-        }
-
-//        showLoading()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -95,6 +88,7 @@ class HomeFragment : BaseFragment(), SongListAdapter.SongClickedListener {
                     Log.d(tag, "onQueryTextSubmit: $query")
                     viewModel.getSongs(query)
                     closeKeyboard()
+                    showLoading()
                 }
                 return true
             }
