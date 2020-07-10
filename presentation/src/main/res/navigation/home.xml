@@ -28,6 +28,12 @@
         <argument
             android:name="trackId"
             app:argType="string" />
+        <argument
+            android:name="previewUrl"
+            app:argType="string" />
+        <argument
+            android:name="trackName"
+            app:argType="string" />
         <action
             android:id="@+id/action_albumDetailFragment_to_homeFragment"
             app:destination="@id/homeFragment" />

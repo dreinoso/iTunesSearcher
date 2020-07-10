@@ -2,7 +2,11 @@ package com.reactions.deathlines.presentation.ui.albumdetail
 
 import android.R
 import android.content.Intent
+import android.content.res.ColorStateList
+import android.media.AudioManager
+import android.media.MediaPlayer
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -16,22 +20,25 @@ import androidx.navigation.findNavController
 import androidx.paging.PagedList
 import com.reactions.deathlines.domain.common.ResultState
 import com.reactions.deathlines.domain.entity.Entity
+import com.reactions.deathlines.presentation.BuildConfig
 import com.reactions.deathlines.presentation.common.extension.observe
 import com.reactions.deathlines.presentation.databinding.FragmentAlbumDetailBinding
 import com.reactions.deathlines.presentation.ui.base.BaseFragment
-import com.reactions.deathlines.presentation.BuildConfig
 import com.squareup.picasso.OkHttp3Downloader
 import com.squareup.picasso.Picasso
-
+import kotlinx.coroutines.*
+import java.io.IOException
 import javax.inject.Inject
+
 
 class AlbumDetailFragment : BaseFragment() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
+    private lateinit var audioPlayer : MediaPlayer
+    private lateinit var progressBarUpdater : Job
     private lateinit var binding: FragmentAlbumDetailBinding
-    private var trackId: Int = 0
 
     private val viewModel: AlbumDetailsViewModel by lazy {
         ViewModelProviders.of(this, viewModelFactory).get(AlbumDetailsViewModel::class.java)
@@ -48,12 +55,27 @@ class AlbumDetailFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        trackId = arguments?.get("trackId").toString().toInt()
+        showLoading()
+        initViews()
+        observe(viewModel.albumSongsLiveData, ::onAlbumSongsLoaded)
+        viewModel.getAlbumSongs(arguments?.get("trackId").toString().toInt())
+        playPreviewAudio(arguments?.get("previewUrl").toString())
+        startUpdatingProgressBar()
+    }
+
+    private fun initViews() {
         binding.btnPurchase.setOnClickListener(::onPurchaseBtnClicked)
         binding.btnDone.setOnClickListener(::onDoneBtnClicked)
-        Log.d(tag, "onViewCreated currentTrackId: $trackId")
-        observe(viewModel.albumSongsLiveData, ::onAlbumSongsLoaded)
-        viewModel.getAlbumSongs(trackId)
+        binding.tvTrackName.text = arguments?.get("trackName").toString()
+        setProgressBarColor()
+    }
+
+    private fun setProgressBarColor() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            binding.pbAudioPreview.progressTintList = ColorStateList.valueOf(
+                    resources.getColor(com.reactions.deathlines.presentation.R.color.colorPrimary)
+            )
+        };
     }
 
     fun onAlbumSongsLoaded(resultState: ResultState<PagedList<Entity.Song>>) {
@@ -62,7 +84,6 @@ class AlbumDetailFragment : BaseFragment() {
             is ResultState.Success -> {
                 hideLoading()
                 populateScreen(resultState.data)
-
             }
             is ResultState.Error -> {
                 hideLoading()
@@ -96,9 +117,43 @@ class AlbumDetailFragment : BaseFragment() {
     }
 
     fun onPurchaseBtnClicked(view: View) {
+        audioPlayer.stop()
         val iTunesPurchaseUrl  = BuildConfig.PURCHASE_URL
         val intent = Intent(Intent.ACTION_VIEW)
         intent.data = Uri.parse(iTunesPurchaseUrl)
         startActivity(intent)
+    }
+
+    fun playPreviewAudio(previewUrl: String) {
+        try {
+            audioPlayer = MediaPlayer()
+            audioPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC)
+            audioPlayer.setDataSource(previewUrl)
+            audioPlayer.setOnPreparedListener{mediaPlayer ->
+                    mediaPlayer.start()
+
+            }
+            audioPlayer.prepareAsync();
+        } catch (ex: IOException) {
+            Log.e(tag, ex.message)
+        }
+    }
+
+    fun startUpdatingProgressBar() {
+        progressBarUpdater = GlobalScope.launch {
+            while (true) {
+                delay(1000);
+                launch(Dispatchers.Main) {
+                    binding.pbAudioPreview.progress = (audioPlayer.currentPosition * 100) / audioPlayer.duration
+                }
+            }
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        if (progressBarUpdater.isActive) { progressBarUpdater.cancel() }
+        audioPlayer.stop()
+        audioPlayer.release()
     }
 }
