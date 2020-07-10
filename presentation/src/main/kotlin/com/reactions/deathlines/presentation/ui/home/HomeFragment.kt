@@ -1,11 +1,13 @@
 package com.reactions.deathlines.presentation.ui.home
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
@@ -83,8 +85,6 @@ class HomeFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, SongL
 //        showLoading()
     }
 
-
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
@@ -98,6 +98,7 @@ class HomeFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, SongL
                 if (!query.isNullOrBlank()) {
                     Log.d(tag, "onQueryTextSubmit: $query")
                     viewModel.getSongs(query)
+                    closeKeyboard()
                 }
                 return true
             }
@@ -111,5 +112,14 @@ class HomeFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, SongL
     override fun onSongClicked(song: Entity.Song) {
         view?.findNavController()?.navigate(HomeFragmentDirections.navigateToAlbumDetailFragment(
                 song.collectionId.toString(),song.previewUrl, song.trackName))
+    }
+
+    fun closeKeyboard() {
+        try {
+            val inputManager: InputMethodManager = (context)?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputManager.hideSoftInputFromWindow(activity?.currentFocus?.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+        } catch (e: Exception) {
+            Log.e(tag, e.message)
+        }
     }
 }
