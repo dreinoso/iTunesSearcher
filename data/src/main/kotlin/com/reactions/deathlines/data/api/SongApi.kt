@@ -30,7 +30,7 @@ interface SongApi {
                 @SerializedName("trackId") val trackId: Long,
                 @SerializedName("wrapperType") val wrapperType: String,
                 @SerializedName("artistName") val artistName: String,
-                @SerializedName("collectionName") val collectionName: String,
+                @SerializedName("collectionName") val collectionName: String?,
                 @SerializedName("trackName") val trackName: String,
                 @SerializedName("trackPrice") val trackPrice: String,
                 @SerializedName("primaryGenreName") val primaryGenreName: String,

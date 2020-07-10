@@ -54,14 +54,11 @@ class SongsRepoBoundaryCallback(
                     }
                 }
                 is ResultState.Error -> {
+                    Log.e(this.javaClass.name, "Something happened! ${songs.throwable.message}")
                     _networkErrors.postValue(songs.throwable.message)
                     isRequestInProgress = false
                 }
             }
         }
-    }
-
-    companion object {
-        private const val NETWORK_PAGE_SIZE = 50
     }
 }

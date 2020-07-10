@@ -16,6 +16,7 @@ import androidx.paging.PagedList
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.reactions.deathlines.domain.common.ResultState
 import com.reactions.deathlines.domain.entity.Entity
+import com.reactions.deathlines.presentation.R
 import com.reactions.deathlines.presentation.common.extension.observe
 import com.reactions.deathlines.presentation.databinding.FragmentHomeBinding
 import com.reactions.deathlines.presentation.ui.base.BaseFragment
@@ -57,7 +58,7 @@ class HomeFragment : BaseFragment(), SongListAdapter.SongClickedListener {
             }
             is ResultState.Error -> {
                 hideLoading()
-                Toast.makeText(activity, resultState.throwable.message, Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity, resultState.throwable.message, Toast.LENGTH_LONG).show()
                 adapter.submitList(resultState.data)
             }
             is ResultState.Loading -> {

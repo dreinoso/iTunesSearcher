@@ -4,7 +4,6 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-
 sealed class SongData {
 
     @Entity(tableName = "song_table")
@@ -13,7 +12,7 @@ sealed class SongData {
                     @ColumnInfo(name = "collectionId") val collectionId: Long,
                     @ColumnInfo(name = "wrapperType") val wrapperType: String,
                     @ColumnInfo(name = "artistName") val artistName: String,
-                    @ColumnInfo(name = "collectionName") val collectionName: String,
+                    @ColumnInfo(name = "collectionName") val collectionName: String?,
                     @ColumnInfo(name = "trackName") val trackName: String,
                     @ColumnInfo(name = "trackPrice") val trackPrice: String,
                     @ColumnInfo(name = "primaryGenreName") val primaryGenreName: String,

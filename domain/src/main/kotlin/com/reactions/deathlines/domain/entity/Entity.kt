@@ -11,7 +11,7 @@ sealed class Entity {
             val trackId: Long,
             val wrapperType: String,
             val artistName: String,
-            val collectionName: String,
+            val collectionName: String?,
             val trackName: String,
             val trackPrice: String,
             val primaryGenreName: String,

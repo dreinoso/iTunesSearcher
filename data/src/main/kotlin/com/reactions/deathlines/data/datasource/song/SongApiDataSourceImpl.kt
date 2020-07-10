@@ -8,14 +8,14 @@ import com.reactions.deathlines.domain.entity.Entity
 
 class SongApiDataSourceImpl(private val api: SongApi) : AlbumsApiDataSource {
 
-    private val LIMIT = 20
+    private val LIMIT = 10
     private val MEDIA_TYPE = "music"
     private val ENTITY = "song"
 
     override fun getSongs(song: String): Single<List<Entity.Song>> =
             api.getSongs(song, MEDIA_TYPE, LIMIT)
                     .applyIoScheduler()
-                    .map { item -> item.results.map { it.map() } }
+                    .map { item -> item.results.filter { it.collectionName != null }.map { it.map() } }
 
     override fun getSongsFromAlbum(collectionId: Int): Single<List<Entity.Song>> =
             api.getSongsFromAlbum(collectionId, ENTITY)
