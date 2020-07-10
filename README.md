@@ -1,2 +1,2 @@
-# deathlines
-Android app with Kotlin to kill procrastination
+# iTunes Searcher
+Android app to search songs from iTunes API and persist the data already downloaded
