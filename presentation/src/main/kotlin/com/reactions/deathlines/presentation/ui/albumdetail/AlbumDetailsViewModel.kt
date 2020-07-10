@@ -39,13 +39,4 @@ class AlbumDetailsViewModel @Inject constructor(
         this.trackId = trackId
         fetch.postValue("")
     }
-
-    fun getCurrentSong(trackId: Int) {
-        if (tempDisposable?.isDisposed != true)
-            tempDisposable?.dispose()
-        tempDisposable = getSongFromTrackIdUseCase.getSong(trackId).subscribe { resultState ->
-            currentSongLiveData.postValue(resultState)
-        }
-        tempDisposable?.track()
-    }
 }

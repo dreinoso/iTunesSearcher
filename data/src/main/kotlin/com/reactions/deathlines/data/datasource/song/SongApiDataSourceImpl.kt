@@ -8,7 +8,7 @@ import com.reactions.deathlines.domain.entity.Entity
 
 class SongApiDataSourceImpl(private val api: SongApi) : AlbumsApiDataSource {
 
-    private val LIMIT = 10
+    private val LIMIT = 40
     private val MEDIA_TYPE = "music"
     private val ENTITY = "song"
 
