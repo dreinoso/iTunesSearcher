@@ -15,10 +15,8 @@ import com.reactions.deathlines.presentation.ui.base.BaseViewModel
 import javax.inject.Inject
 
 class AlbumDetailsViewModel @Inject constructor(
-        private val getSongFromTrackIdUseCase: GetSongFromTrackIdUseCase,
         private val getSongsFromAlbumUseCase: GetSongsFromAlbumUseCase) : BaseViewModel() {
 
-    val currentSongLiveData = MutableLiveData<ResultState<Entity.Song>>()
     private var tempDisposable: Disposable? = null
     private val fetch = MutableLiveData<String>()
     private var trackId = 0
