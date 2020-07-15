@@ -8,7 +8,6 @@ import androidx.paging.PagedList
 import io.reactivex.disposables.Disposable
 import com.reactions.deathlines.domain.common.ResultState
 import com.reactions.deathlines.domain.entity.Entity
-import com.reactions.deathlines.domain.usecase.album.GetSongFromTrackIdUseCase
 import com.reactions.deathlines.domain.usecase.album.GetSongsFromAlbumUseCase
 import com.reactions.deathlines.presentation.common.OperationLiveData
 import com.reactions.deathlines.presentation.ui.base.BaseViewModel
